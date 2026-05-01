@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}My Results{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-bar-chart-line me-2" style="color:var(--accent)"></i>My Results</h1>
+    <p>All your quiz attempts and scores</p>
+  </div>
+</div>
+<div class="container mt-4">
+  {% if results %}
+  <div class="row g-3">
+    {% for r in results %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card-dark p-4 h-100" style="border-left:4px solid {% if r.judgment=='Pass' %}var(--pass){% else %}var(--fail){% endif %}">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <div style="color:#fff;font-weight:700">{{ r.module_title }}</div>
+            <div style="color:var(--muted);font-size:.8rem">{{ r.course_name }}</div>
+          </div>
+          <span style="font-size:.82rem;font-weight:700;padding:.2rem .7rem;border-radius:6px;background:{% if r.judgment=='Pass' %}rgba(16,185,129,.15){% else %}rgba(239,68,68,.15){% endif %};color:{% if r.judgment=='Pass' %}var(--pass){% else %}var(--fail){% endif %}">
+            {{ r.judgment }}
+          </span>
+        </div>
+        <div class="d-flex gap-3 mb-3" style="font-size:.88rem">
+          <span style="color:var(--muted)">Score: <strong style="color:#fff">{{ r.score }}/{{ r.total_marks }}</strong></span>
+          <span style="color:var(--muted)">Pass: <strong style="color:#fff">{{ r.passing_marks }}</strong></span>
+        </div>
+        <div style="background:var(--border);border-radius:4px;height:6px;overflow:hidden">
+          <div style="background:{% if r.judgment=='Pass' %}var(--pass){% else %}var(--fail){% endif %};width:{{ (r.score/r.total_marks*100)|round|int if r.total_marks else 0 }}%;height:100%;border-radius:4px"></div>
+        </div>
+        <div style="color:var(--muted);font-size:.78rem;margin-top:.5rem">
+          <i class="bi bi-clock me-1"></i>{{ r.taken_at.strftime('%B %d, %Y · %I:%M %p') if r.taken_at else '—' }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <div style="font-size:3.5rem;margin-bottom:1rem">📋</div>
+    <h4 style="color:#fff">No results yet</h4>
+    <p style="color:var(--muted)">Enroll in a course and attempt a quiz to see your results here.</p>
+    <a href="{{ url_for('courses') }}" class="btn-accent btn mt-2">Browse Courses</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container" style="max-width:440px;padding:4rem 1rem">
+  <div class="text-center mb-4">
+    <div style="font-size:2.5rem;margin-bottom:.5rem">🎓</div>
+    <h1 style="font-size:1.8rem;font-weight:700;color:#fff">Welcome Back</h1>
+    <p style="color:var(--muted)">Sign in to continue learning</p>
+  </div>
+  <div class="card-dark p-4">
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-control" placeholder="you@example.com" required/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="••••••••" required/>
+      </div>
+      <button type="submit" class="btn-accent btn w-100">Sign In <i class="bi bi-arrow-right ms-1"></i></button>
+    </form>
+    <p class="text-center mt-3 mb-0" style="color:var(--muted);font-size:.9rem">
+      New here? <a href="{{ url_for('register') }}" style="color:var(--accent2)">Create an account</a>
+    </p>
+  </div>
+  <p class="text-center mt-3" style="color:var(--muted);font-size:.8rem">
+    Demo Admin: admin@elearn.com / admin123<br>
+    Demo Student: alice@elearn.com / alice123
+  </p>
+</div>
+{% endblock %}

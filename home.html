@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- HERO -->
+<section style="padding:5rem 0 4rem;background:radial-gradient(ellipse at 60% 0%,rgba(91,94,244,.18) 0%,transparent 60%)">
+  <div class="container text-center">
+    <div class="mb-3" style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:2px">NEXT-GEN LEARNING PLATFORM</div>
+    <h1 style="font-size:3.5rem;font-weight:700;letter-spacing:-2px;line-height:1.1;max-width:700px;margin:0 auto">
+      Learn Anything.<br><span style="color:var(--accent2)">Achieve Everything.</span>
+    </h1>
+    <p class="mt-4 mb-4" style="color:var(--muted);max-width:500px;margin:1.5rem auto;font-size:1.05rem">
+      Structured courses, interactive quizzes, and real-time progress tracking — all in one place.
+    </p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="{{ url_for('courses') }}" class="btn-accent btn btn-lg">Explore Courses <i class="bi bi-arrow-right ms-1"></i></a>
+      {% if not session.user_id %}
+      <a href="{{ url_for('register') }}" class="btn-outline-accent btn btn-lg">Join Free</a>
+      {% endif %}
+    </div>
+    <!-- STATS ROW -->
+    <div class="d-flex justify-content-center gap-5 mt-5 flex-wrap">
+      <div><div style="font-size:2rem;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace">{{ courses|length }}+</div><div style="color:var(--muted);font-size:.85rem">Courses</div></div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div><div style="font-size:2rem;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace">{{ categories|length }}</div><div style="color:var(--muted);font-size:.85rem">Categories</div></div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div><div style="font-size:2rem;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace">100%</div><div style="color:var(--muted);font-size:.85rem">Free</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED COURSES -->
+<section style="padding:4rem 0">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h2 style="font-size:1.7rem;font-weight:700;color:#fff;letter-spacing:-0.5px">Featured Courses</h2>
+        <p style="color:var(--muted);margin:0">Hand-picked to get you started fast</p>
+      </div>
+      <a href="{{ url_for('courses') }}" class="btn-outline-accent btn">View All</a>
+    </div>
+    <div class="row g-4">
+      {% for c in courses %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card-dark p-4 h-100 d-flex flex-column">
+          <div class="mb-3">
+            <span class="badge-cat"><i class="bi bi-tag me-1"></i>{{ c.category_name or 'General' }}</span>
+          </div>
+          <h5 style="font-weight:700;color:#fff;margin-bottom:.5rem">{{ c.course_name }}</h5>
+          <p style="color:var(--muted);font-size:.9rem;flex:1">{{ (c.description or '')[:100] }}{% if c.description and c.description|length > 100 %}...{% endif %}</p>
+          <a href="{{ url_for('course_detail', cid=c.course_id) }}" class="btn-accent btn btn-sm mt-3">View Course</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section style="padding:3rem 0;border-top:1px solid var(--border)">
+  <div class="container">
+    <h2 class="text-center mb-4" style="font-size:1.5rem;font-weight:700;color:#fff">Browse by Category</h2>
+    <div class="d-flex flex-wrap gap-3 justify-content-center">
+      {% for cat in categories %}
+      <a href="{{ url_for('courses', cat=cat.category_id) }}"
+         style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.6rem 1.3rem;color:var(--text);text-decoration:none;font-weight:500;transition:.2s"
+         onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <i class="bi bi-folder2 me-2" style="color:var(--accent)"></i>{{ cat.category_name }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

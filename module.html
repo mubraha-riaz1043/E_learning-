@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ mod.module_title }}{% endblock %}
+{% block content %}
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <!-- SIDEBAR: Module List -->
+    <div class="col-lg-3 d-none d-lg-block sidebar">
+      <div class="px-3 mb-2">
+        <p style="color:var(--muted);font-size:.75rem;letter-spacing:1px;text-transform:uppercase">{{ mod.course_name }}</p>
+      </div>
+      {% for m in all_mods %}
+      <a href="{{ url_for('module_page', mid=m.module_id) }}"
+         class="sidebar-link {% if m.module_id == mod.module_id %}active{% endif %}">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;opacity:.6;min-width:20px">{{ m.order_no }}</span>
+        {{ m.module_title }}
+      </a>
+      {% endfor %}
+    </div>
+    <!-- CONTENT -->
+    <div class="col-lg-9" style="padding:2.5rem">
+      <div class="d-flex align-items-center gap-2 mb-1" style="color:var(--muted);font-size:.85rem">
+        <i class="bi bi-layers"></i> Module {{ mod.order_no }}
+      </div>
+      <h2 style="font-weight:700;color:#fff;letter-spacing:-0.5px;margin-bottom:1.5rem">{{ mod.module_title }}</h2>
+
+      <!-- CONTENT CARD -->
+      <div class="card-dark p-4 mb-4" style="line-height:1.9;color:var(--text)">
+        {{ mod.content or 'No content available for this module yet.' }}
+      </div>
+
+      <!-- QUIZ CTA -->
+      {% if test %}
+      <div class="card-dark p-4 d-flex align-items-center justify-content-between gap-3 flex-wrap" style="border-color:var(--accent)">
+        <div>
+          <h5 style="color:#fff;font-weight:700;margin:0"><i class="bi bi-pencil-square me-2" style="color:var(--accent)"></i>Module Quiz</h5>
+          <p style="color:var(--muted);margin:.3rem 0 0;font-size:.9rem">Total Marks: {{ test.total_marks }} · Passing: {{ test.passing_marks }}</p>
+        </div>
+        <a href="{{ url_for('quiz', test_id=test.test_id) }}" class="btn-accent btn">
+          Start Quiz <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+      {% else %}
+      <div class="card-dark p-3" style="color:var(--muted)"><i class="bi bi-info-circle me-2"></i>No quiz available for this module.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

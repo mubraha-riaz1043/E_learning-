@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Admin — Questions{% endblock %}
+{% block content %}
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-lg-2 d-none d-lg-block sidebar">
+      <div class="px-3 mb-3"><p style="color:var(--accent2);font-size:.75rem;letter-spacing:1px;text-transform:uppercase;padding-left:.5rem">Admin Panel</p></div>
+      <a href="{{ url_for('admin_dashboard') }}" class="sidebar-link"><i class="bi bi-speedometer2"></i>Overview</a>
+      <a href="{{ url_for('admin_categories') }}" class="sidebar-link"><i class="bi bi-tags"></i>Categories</a>
+      <a href="{{ url_for('admin_courses') }}" class="sidebar-link"><i class="bi bi-journals"></i>Courses</a>
+      <a href="{{ url_for('admin_modules') }}" class="sidebar-link"><i class="bi bi-collection"></i>Modules</a>
+      <a href="{{ url_for('admin_questions') }}" class="sidebar-link active"><i class="bi bi-question-circle"></i>Questions</a>
+      <a href="{{ url_for('admin_users') }}" class="sidebar-link"><i class="bi bi-people"></i>Users</a>
+    </div>
+    <div class="col-lg-10" style="padding:2rem">
+      <h2 style="font-weight:700;color:#fff;margin-bottom:1.5rem"><i class="bi bi-question-circle me-2" style="color:var(--accent)"></i>Questions & Solutions</h2>
+      <!-- ADD FORM -->
+      <div class="card-dark p-4 mb-4">
+        <h6 style="color:#fff;font-weight:700;margin-bottom:1rem">Add New Question</h6>
+        <form method="POST" action="{{ url_for('add_question') }}" class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Module</label>
+            <select name="module_id" class="form-select" required>
+              <option value="">Select module</option>
+              {% for m in modules %}<option value="{{ m.module_id }}">{{ m.module_title }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Question Text</label>
+            <input type="text" name="question_text" class="form-control" placeholder="Enter the question..." required/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Option A</label>
+            <input type="text" name="option_a" class="form-control" placeholder="Option A" required/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Option B</label>
+            <input type="text" name="option_b" class="form-control" placeholder="Option B" required/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Option C</label>
+            <input type="text" name="option_c" class="form-control" placeholder="Option C"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Option D</label>
+            <input type="text" name="option_d" class="form-control" placeholder="Option D"/>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Correct Option</label>
+            <select name="correct_option" class="form-select" required>
+              <option value="A">A</option><option value="B">B</option>
+              <option value="C">C</option><option value="D">D</option>
+            </select>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Solution Text</label>
+            <input type="text" name="solution_text" class="form-control" placeholder="Brief answer description"/>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Explanation</label>
+            <input type="text" name="explanation" class="form-control" placeholder="Why is this the correct answer?"/>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-accent btn">Add Question + Solution</button>
+          </div>
+        </form>
+      </div>
+      <!-- TABLE -->
+      <div class="card-dark p-0" style="overflow:hidden">
+        <table class="table table-dark-custom table-hover mb-0">
+          <thead><tr style="border-bottom:1px solid var(--border)">
+            <th class="p-3">ID</th><th class="p-3">Question</th><th class="p-3">Module</th><th class="p-3">Correct</th><th class="p-3">Action</th>
+          </tr></thead>
+          <tbody>
+            {% for q in questions %}
+            <tr>
+              <td class="p-3 text-muted" style="font-family:'JetBrains Mono',monospace">{{ q.question_id }}</td>
+              <td class="p-3 text-white" style="max-width:260px">{{ q.question_text[:80] }}{% if q.question_text|length>80 %}...{% endif %}</td>
+              <td class="p-3 text-muted">{{ q.module_title }}</td>
+              <td class="p-3"><span style="background:rgba(16,185,129,.15);color:var(--pass);border-radius:6px;padding:.2rem .6rem;font-family:'JetBrains Mono',monospace;font-weight:700">{{ q.correct_option or '?' }}</span></td>
+              <td class="p-3">
+                <a href="{{ url_for('delete_question', qid=q.question_id) }}"
+                   onclick="return confirm('Delete this question?')"
+                   class="btn btn-sm" style="background:rgba(239,68,68,.15);color:var(--fail);border:none">
+                   <i class="bi bi-trash"></i> Delete</a>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="p-4 text-center text-muted">No questions yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-journals me-2" style="color:var(--accent)"></i>All Courses</h1>
+    <p>Expand your skills across {{ categories|length }} categories</p>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <!-- FILTER BAR -->
+  <div class="d-flex gap-2 flex-wrap mb-4">
+    <a href="{{ url_for('courses') }}"
+       class="btn btn-sm {% if not selected %}btn-accent{% else %}btn-outline-accent{% endif %}">All</a>
+    {% for cat in categories %}
+    <a href="{{ url_for('courses', cat=cat.category_id) }}"
+       class="btn btn-sm {% if selected == cat.category_id|string %}btn-accent{% else %}btn-outline-accent{% endif %}">
+       {{ cat.category_name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="row g-4">
+    {% for c in courses %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="card-dark p-4 h-100 d-flex flex-column">
+        <span class="badge-cat mb-3"><i class="bi bi-tag me-1"></i>{{ c.category_name or 'General' }}</span>
+        <h5 style="font-weight:700;color:#fff;flex:1">{{ c.course_name }}</h5>
+        <p style="color:var(--muted);font-size:.88rem;margin:.5rem 0 1rem">{{ (c.description or '')[:110] }}{% if c.description and c.description|length>110 %}...{% endif %}</p>
+        <a href="{{ url_for('course_detail', cid=c.course_id) }}" class="btn-accent btn btn-sm mt-auto">View Course</a>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5" style="color:var(--muted)">
+      <i class="bi bi-search" style="font-size:3rem;display:block;margin-bottom:1rem"></i>
+      No courses found in this category.
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
